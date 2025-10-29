@@ -16,10 +16,10 @@ The folder `phish_ai_logs` contains log files, and CSV files store AI summaries 
 ```bash
 pip install -r requirements.txt
 
-### Run the rule-based app:
+Run the rule-based app:
 streamlit run phish_app.py
 
-### Run the AI-based app:
+Run the AI-based app:
 streamlit run phish_app_ai.py
 
 phishing_app/
@@ -36,11 +36,11 @@ phishing_app/
 ├── .gitattributes
 └── README.md
 
-## Features
+Features
 Rule-based and AI/ML phishing detection
 Log storage and CSV summaries
 Interactive interface with Streamlit
 
-** Author **
-** Zena Njeri Wambugu **
+Author
+Zena Njeri Wambugu
 
