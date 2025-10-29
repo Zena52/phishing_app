@@ -1,4 +1,4 @@
-# phish_app.py (polished rule-based Phishing Detector)
+# phish_app.py 
 import streamlit as st
 import re
 import csv
@@ -73,14 +73,14 @@ def score_email(text, sender):
     }
 
 def highlight_email(text, highlights):
-    # highlights: list of substrings to wrap in red <mark>
-    safe_text = st.markdown  # alias
+    # highlights
+    safe_text = st.markdown 
     escaped = text.replace("<", "&lt;").replace(">", "&gt;")
-    # Sort by length desc to avoid nested replacements
+    
     highlights = sorted(set(h for h in highlights if h.strip()), key=lambda s: -len(s))
     for h in highlights:
         esc_h = h.replace("<", "&lt;").replace(">", "&gt;")
-        # simple case-insensitive replacement using regex
+        # simple case-insensitive replacement 
         try:
             escaped = re.sub(re.escape(esc_h), f"<mark style='background: #ffb3b3'>{esc_h}</mark>", escaped, flags=re.IGNORECASE)
         except re.error:
@@ -135,10 +135,10 @@ with col1:
                 "summary": f"{level} — score {score}"
             }
 
-            # append to local csv log
+            
             append_log(report)
 
-            # prepare highlights: urgency phrases + personal + link flags + urls + attachments
+            
             highlights = []
             highlights.extend(res.get("urgency_phrases", []))
             highlights.extend(res.get("personal_requests", []))
@@ -146,7 +146,7 @@ with col1:
             highlights.extend(res.get("urls", []))
             highlights.extend(res.get("attachments", []))
 
-            # send results to right column via session_state
+            
             st.session_state["last_report"] = report
             st.session_state["last_highlights"] = highlights
 
@@ -182,7 +182,7 @@ with col2:
         st.markdown(f"<div style='white-space: pre-wrap; font-family: monospace; padding:10px; border-radius:6px; background:#fafafa'>{highlighted_html}</div>", unsafe_allow_html=True)
 
         st.markdown("---")
-        # download JSON report
+        
         json_bytes = json.dumps(r, indent=2).encode("utf-8")
         st.download_button("Download JSON report", data=json_bytes, file_name=f"phish_report_{r['id']}.json", mime="application/json")
         st.write("Saved to local log: phish_logs.csv")

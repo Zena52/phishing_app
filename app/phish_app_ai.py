@@ -8,10 +8,10 @@ from urllib.parse import urlparse
 from datetime import datetime
 import uuid
 
-# Transformers zero-shot pipeline
+
 from transformers import pipeline
 
-# ---------------- UI config (UI B: modern single-column)
+
 st.set_page_config(page_title="PhishAI — Local AI Detector", page_icon="🤖", layout="centered")
 st.title("🤖 PhishAI — Local AI + Rules (Version B)")
 st.subheader("Zero-shot classification (local). No API keys. First run downloads the model — please be patient.")
@@ -53,13 +53,13 @@ def rule_flags(text):
         flags.append({"type":"links","items": link_warnings})
     return flags, urls
 
-# ---------------- Model loader (cached)
+# ---------------- Model loader 
 @st.cache_resource(show_spinner=False)
 def load_zs():
-    # model downloads on first run (~400MB). Runs on CPU by default.
+    # Downloads model on first run; runs on CPU
     return pipeline("zero-shot-classification", model="facebook/bart-large-mnli", device=-1)
 
-# lazy load with helpful message
+
 try:
     zs = load_zs()
 except Exception as e:
@@ -126,7 +126,7 @@ with col1:
                     writer.writerow(["id","timestamp","sender","ai_label","ai_score","final_verdict"])
                 writer.writerow([rid, report["timestamp"], report["sender"], ai_label, ai_score, level])
 
-            # store in session for UI
+            
             st.session_state["last_ai_report"] = report
 
 with col2:
