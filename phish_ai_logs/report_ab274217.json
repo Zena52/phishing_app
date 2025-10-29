@@ -1,0 +1,35 @@
+{
+  "id": "ab274217",
+  "timestamp": "2025-10-29T12:09:28.268334",
+  "sender": "unknown",
+  "ai_label": "notification",
+  "ai_score": 0.8709765076637268,
+  "rule_flags": [
+    {
+      "type": "urgency",
+      "items": [
+        "act now",
+        "verify now",
+        "suspended"
+      ]
+    },
+    {
+      "type": "personal_request",
+      "items": [
+        "password",
+        "otp"
+      ]
+    },
+    {
+      "type": "links",
+      "items": [
+        "suspicious tld: bank-secure.example-login.xyz"
+      ]
+    }
+  ],
+  "urls": [
+    "https://bank-secure.example-login.xyz/verify"
+  ],
+  "final_verdict": "SUSPICIOUS",
+  "raw_preview": "Subject: Your account will be suspended - verify now\nHello,\nWe detected suspicious activity. Act now to verify your account by clicking https://bank-secure.example-login.xyz/verify\nProvide your password and OTP on the page."
+}
