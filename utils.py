@@ -1,46 +1,66 @@
 import re
-import random
+from PyPDF2 import PdfReader
 
+# -------------------
+# TEXT UTILITIES
+# -------------------
 def clean_text(text):
     text = text.replace("\n", " ")
     text = re.sub(r"\s+", " ", text)
     return text.strip()
 
-def summarize(text, sentences=3):
-    parts = text.split(".")
-    summary = ". ".join(parts[:sentences])
-    return summary + "."
+# -------------------
+# SUMMARIZATION
+# -------------------
+def summarize(text):
+    sentences = text.split('. ')
+    summary = '. '.join(sentences[:5])  # first 5 sentences
+    return summary
 
-def generate_flashcards(text, count=5):
-    lines = text.split(".")
-    cards = random.sample(lines, min(count, len(lines)))
-    return [("Concept:", c.strip()) for c in cards]
+# -------------------
+# FLASHCARDS
+# -------------------
+def generate_flashcards(text):
+    sentences = text.split('. ')
+    flashcards = []
+    for i, sent in enumerate(sentences[:5], 1):
+        question = f"What is the main idea of sentence {i}?"
+        answer = sent
+        flashcards.append({'question': question, 'answer': answer})
+    return flashcards
 
-def generate_quiz(text, count=5):
-    lines = [l.strip() for l in text.split(".") if len(l.split()) > 4]
-    questions = random.sample(lines, min(count, len(lines)))
+# -------------------
+# QUIZ
+# -------------------
+def generate_quiz(text):
+    sentences = text.split('. ')
     quiz = []
-    for q in questions:
-        quiz.append({
-            "question": f"What does this refer to: '{q[:50]}...'",
-            "answer": q
-        })
+    for i, sent in enumerate(sentences[:3], 1):
+        question = f"What does sentence {i} convey?"
+        choices = [sent, "Option B", "Option C", "Option D"]
+        answer = sent
+        quiz.append({'question': question, 'choices': choices, 'answer': answer})
     return quiz
 
+# -------------------
+# ASK QUESTION
+# -------------------
 def answer_question(text, question):
-    words = question.lower().split()
-    best = ""
-    for sentence in text.split("."):
-        if any(w in sentence.lower() for w in words):
-            best = sentence
-            break
-    return best if best else "I couldn't find an answer in your notes."
+    keyword = question.split()[0]
+    sentences = text.split('. ')
+    for sent in sentences:
+        if keyword.lower() in sent.lower():
+            return sent
+    return "Sorry, I could not find an answer."
 
-def get_word_count(text):
-    words = text.split()
-    return len(words)
-
-def get_read_time(word_count, wpm=200):
-    # average reading speed = 200 words per minute
-    minutes = word_count / wpm
-    return round(minutes, 2)
+# -------------------
+# FILE HANDLING
+# -------------------
+def extract_text_from_pdf(file):
+    pdf = PdfReader(file)
+    text = ""
+    for page in pdf.pages:
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + " "
+    return text
